@@ -1,8 +1,14 @@
 package com.escaler.fakestoreservice.controller;
 
+import com.escaler.fakestoreservice.dtos.GetSingleProductResponseDto;
 import com.escaler.fakestoreservice.dtos.ProductDto;
+import com.escaler.fakestoreservice.model.Product;
 import com.escaler.fakestoreservice.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -14,12 +20,20 @@ public class ProductController {
     }
 
     @GetMapping
-    public String getAllProduct(){
-        return "return All Products";
+    public List<Product> getAllProduct(){
+        return productService.getAllProduct();
     }
+
+//    @GetMapping("/{productId}")
+//    public ResponseEntity<Product> getSingleProduct(@PathVariable("productId") Long productId){
+//        ResponseEntity<Product> response=new ResponseEntity<>(productService.getSingleProduct(productId), HttpStatus.OK);
+//        return response; //just change the status code of response
+//    }
     @GetMapping("/{productId}")
-    public String getSingleProduct(@PathVariable("productId") Long productId){
-        return "return Single Product with id : "+productId;
+    public GetSingleProductResponseDto getSingleProduct(@PathVariable("productId") Long productId){
+        GetSingleProductResponseDto responseDto = new GetSingleProductResponseDto();
+        responseDto.setProduct(productService.getSingleProduct(productId));
+        return responseDto;
     }
     @GetMapping("/limited")
     public String getLimitedProduct(@RequestParam(name = "limit") Long limit){
@@ -30,8 +44,10 @@ public class ProductController {
         return "return Sorted Product with Sort Type : "+sortType;
     }
     @PostMapping
-    public String addNewProduct(@RequestBody ProductDto productDto){
-        return "Add Product" +productDto;
+    public ResponseEntity<Product> addNewProduct(@RequestBody ProductDto product){
+        Product response = productService.addNewProduct(product);
+        ResponseEntity<Product> responseEntity=new ResponseEntity<>(response,HttpStatus.OK);
+        return responseEntity;
     }
     @PutMapping("/{productId}")
     public String updateProduct(@PathVariable("productId") Long productId,@RequestBody ProductDto productDto){
