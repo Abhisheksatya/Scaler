@@ -1,12 +1,14 @@
 package com.escaler.fakestoreservice.services;
 
 import com.escaler.fakestoreservice.dtos.ProductDto;
-import org.springframework.web.bind.annotation.*;
+import com.escaler.fakestoreservice.model.Product;
+
+import java.util.List;
 
 public interface ProductService {
-    public String getAllProduct();
-    public String getSingleProduct( Long productId);
-    public String addNewProduct( ProductDto productDto);
-    public String updateProduct( Long productId);
-    public String deleteProduct( Long productId);
+    List<Product> getAllProduct();
+    Product getSingleProduct( Long productId);
+    Product addNewProduct(ProductDto product);
+    Product updateProduct( Long productId,Product product);
+    boolean  deleteProduct( Long productId);
 }
